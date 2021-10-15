@@ -7,12 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.mineacademy.fo.Common;
+import org.mineacademy.fo.Messenger;
 import org.mineacademy.fo.MinecraftVersion;
 import org.mineacademy.fo.MinecraftVersion.V;
 import org.mineacademy.fo.model.HookManager;
 import org.mineacademy.fo.plugin.SimplePlugin;
 import org.mineacademy.fo.settings.YamlStaticConfig;
-import org.mineacademy.winter.commands.WinterCommandGroup;
 import org.mineacademy.winter.hook.ProtocolLibBiomeHook;
 import org.mineacademy.winter.listener.ChestListener;
 import org.mineacademy.winter.listener.MeltingListener;
@@ -31,12 +31,7 @@ import org.mineacademy.winter.settings.Localization;
 import org.mineacademy.winter.settings.Settings;
 import org.mineacademy.winter.util.SnowStorm;
 
-import lombok.Getter;
-
 public class Winter extends SimplePlugin {
-
-	@Getter
-	private final WinterCommandGroup mainCommand = new WinterCommandGroup();
 
 	@Override
 	public V getMinimumVersion() {
@@ -55,11 +50,15 @@ public class Winter extends SimplePlugin {
 
 	@Override
 	protected void onPluginStart() {
+		Messenger.ENABLED = false;
+
 		Common.runLater(ChestData::$);
 
 		registerEvents(new WinterListener());
 		registerEvents(new ChestListener());
-		registerEventsIf(new PsychoMob(), PsychoMob.IS_COMPATIBLE);
+
+		if (PsychoMob.IS_COMPATIBLE)
+			registerEvents(new PsychoMob());
 
 		Common.log(
 				"&fGet Support:",

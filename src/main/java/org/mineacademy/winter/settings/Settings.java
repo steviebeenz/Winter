@@ -157,7 +157,7 @@ public final class Settings extends SimpleSettings {
 				DESTROY_CROPS = getBoolean("Destroy_Crops");
 				IGNORE_FREEZE = loadFreezeIgnore("Freeze_Ignore");
 				IGNORE_PLACE = new StrictList<>(getStringList("Do_Not_Place_On"));
-				IGNORE_BIOMES = new StrictSet<>(getCompatibleEnumList("Ignore_Biomes", Biome.class));
+				IGNORE_BIOMES = new StrictSet<>(getList("Ignore_Biomes", Biome.class));
 
 			}
 
@@ -183,13 +183,13 @@ public final class Settings extends SimpleSettings {
 						continue;
 					}
 
-					final CompMaterial mat = CompMaterial.fromStringCompat(raw);
+					final CompMaterial mat = CompMaterial.fromString(raw);
 
 					if (mat != null && !list.contains(mat.toString()))
 						list.add(mat.toString());
 				}
 
-				return new IsInList<>(list.getSource());
+				return IsInList.fromList(list);
 			}
 		}
 
@@ -231,7 +231,7 @@ public final class Settings extends SimpleSettings {
 			ENABLED = getBoolean("Enabled");
 			PERIOD = getInteger("Period_Ticks");
 			AMOUNT = getInteger("Amount");
-			CHAOS = (float) getDoubleSafe("Chaos");
+			CHAOS = (float) getDouble("Chaos");
 			REALISTIC = getBoolean("Realistic");
 			REQUIRE_SNOW_BIOMES = getBoolean("Require_Snow_Biomes");
 			IGNORE_VANISHED = getBoolean("Ignore_Vanished");
@@ -278,7 +278,7 @@ public final class Settings extends SimpleSettings {
 			private static void init() {
 				pathPrefix("Snowman.Damage");
 
-				SNOWBALL = getDoubleSafe("Snowball");
+				SNOWBALL = getDouble("Snowball");
 			}
 		}
 
@@ -309,6 +309,6 @@ public final class Settings extends SimpleSettings {
 	private static void init() {
 		pathPrefix(null);
 
-		ALLOWED_WORLDS = new IsInList<>(getStringList("Worlds"));
+		ALLOWED_WORLDS = getIsInList("Worlds", String.class);
 	}
 }

@@ -74,7 +74,7 @@ public class ChestData extends YamlSectionConfig {
 
 	public final OfflinePlayer getOwner(Sign sign) {
 		final String loc = SerializeUtil.serializeLoc(sign.getLocation());
-		Valid.checkBoolean(signs.contains(loc), "No sign registered at [" + loc + "]");
+		Valid.checkBoolean(signs.containsKey(loc), "No sign registered at [" + loc + "]");
 
 		final OfflinePlayer owner = Bukkit.getOfflinePlayer(UUID.fromString(signs.get(loc)));
 		Valid.checkNotNull(owner, "Could not find owner from " + signs.get(loc));

@@ -199,7 +199,7 @@ public class PlayerData extends YamlSectionConfig {
 	}
 
 	public final ChestDataCache getWeak(Player owner, Chest chest) {
-		return data.contains(owner.getUniqueId()) ? data.get(owner.getUniqueId()).get(chest) : null;
+		return data.containsKey(owner.getUniqueId()) ? data.get(owner.getUniqueId()).get(chest) : null;
 	}
 
 	public final boolean hasSnowEnabled(Player player) {
