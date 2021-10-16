@@ -29,17 +29,17 @@ public final class Settings extends SimpleSettings {
 		return 1;
 	}
 
-	/**
-	 * @see org.mineacademy.fo.settings.YamlStaticConfig#saveComments()
-	 */
-	@Override
-	protected boolean saveComments() {
-		return true;
-	}
-
 	@Override
 	protected List<String> getUncommentedSections() {
 		return Arrays.asList("Terrain.Snow_Generation.Freeze_Ignore");
+	}
+
+	/**
+	 * @see org.mineacademy.fo.settings.YamlConfig#saveComments()
+	 */
+	@Override
+	protected boolean saveComments() {
+		return false;
 	}
 
 	public static final class GiftChest {
@@ -102,7 +102,7 @@ public final class Settings extends SimpleSettings {
 				Common.logFramed(false,
 						"Warning: Your Dated_Chest.Default_Year is " + DEFAULT_YEAR + ".",
 						"You do not need to update it if your chests are overlapping",
-						"from for example 2020 to 2021 (then leave at 2020).");
+						"from for example 2021 to 2022 (then leave at 2021).");
 		}
 	}
 
@@ -157,7 +157,7 @@ public final class Settings extends SimpleSettings {
 				DESTROY_CROPS = getBoolean("Destroy_Crops");
 				IGNORE_FREEZE = loadFreezeIgnore("Freeze_Ignore");
 				IGNORE_PLACE = new StrictList<>(getStringList("Do_Not_Place_On"));
-				IGNORE_BIOMES = new StrictSet<>(getCompatibleEnumList("Ignore_Biomes", Biome.class));
+				IGNORE_BIOMES = new StrictSet<>(getList("Ignore_Biomes", Biome.class));
 
 			}
 
@@ -183,13 +183,13 @@ public final class Settings extends SimpleSettings {
 						continue;
 					}
 
-					final CompMaterial mat = CompMaterial.fromStringCompat(raw);
+					final CompMaterial mat = CompMaterial.fromString(raw);
 
 					if (mat != null && !list.contains(mat.toString()))
 						list.add(mat.toString());
 				}
 
-				return new IsInList<>(list.getSource());
+				return IsInList.fromList(list);
 			}
 		}
 
@@ -231,7 +231,7 @@ public final class Settings extends SimpleSettings {
 			ENABLED = getBoolean("Enabled");
 			PERIOD = getInteger("Period_Ticks");
 			AMOUNT = getInteger("Amount");
-			CHAOS = (float) getDoubleSafe("Chaos");
+			CHAOS = (float) getDouble("Chaos");
 			REALISTIC = getBoolean("Realistic");
 			REQUIRE_SNOW_BIOMES = getBoolean("Require_Snow_Biomes");
 			IGNORE_VANISHED = getBoolean("Ignore_Vanished");
@@ -267,7 +267,7 @@ public final class Settings extends SimpleSettings {
 				DESPAWN = getBoolean("Despawn");
 
 				if ((CONVERT_EXISTING || CONVERT_NEW) && !PsychoMob.IS_COMPATIBLE)
-					Common.logFramed(false, "Notice: Psycho is not compatible with your MC version. Currently requires: " + PsychoMob.COMP_VERSION);
+					Common.logFramed(false, "Notice: Psycho is not compatible with your MC version. Currently requires: " + PsychoMob.COMPATIBLE);
 			}
 		}
 
@@ -278,7 +278,7 @@ public final class Settings extends SimpleSettings {
 			private static void init() {
 				pathPrefix("Snowman.Damage");
 
-				SNOWBALL = getDoubleSafe("Snowball");
+				SNOWBALL = getDouble("Snowball");
 			}
 		}
 
@@ -309,6 +309,6 @@ public final class Settings extends SimpleSettings {
 	private static void init() {
 		pathPrefix(null);
 
-		ALLOWED_WORLDS = new IsInList<>(getStringList("Worlds"));
+		ALLOWED_WORLDS = getIsInList("Worlds", String.class);
 	}
 }

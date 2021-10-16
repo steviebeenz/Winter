@@ -26,6 +26,14 @@ public class ChestData extends YamlSectionConfig {
 	}
 	// -----------------------------------------------------------------------------
 
+	/**
+	 * @see org.mineacademy.fo.settings.YamlConfig#saveComments()
+	 */
+	@Override
+	protected boolean saveComments() {
+		return false;
+	}
+
 	// Location, UUID
 	private final StrictMap<String, String> signs = new StrictMap<>();
 
@@ -56,19 +64,17 @@ public class ChestData extends YamlSectionConfig {
 		signs.put(SerializeUtil.serializeLoc(sign.getLocation()), owner.getUniqueId().toString());
 
 		save("Signs", signs);
-		onLoadFinish();
 	}
 
 	public final void removeSign(Sign sign) {
 		signs.remove(SerializeUtil.serializeLoc(sign.getLocation()));
 
 		save("Signs", signs);
-		onLoadFinish();
 	}
 
 	public final OfflinePlayer getOwner(Sign sign) {
 		final String loc = SerializeUtil.serializeLoc(sign.getLocation());
-		Valid.checkBoolean(signs.contains(loc), "No sign registered at [" + loc + "]");
+		Valid.checkBoolean(signs.containsKey(loc), "No sign registered at [" + loc + "]");
 
 		final OfflinePlayer owner = Bukkit.getOfflinePlayer(UUID.fromString(signs.get(loc)));
 		Valid.checkNotNull(owner, "Could not find owner from " + signs.get(loc));

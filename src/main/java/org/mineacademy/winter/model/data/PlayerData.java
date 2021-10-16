@@ -34,6 +34,14 @@ public class PlayerData extends YamlSectionConfig {
 		return instance;
 	}
 
+	/**
+	 * @see org.mineacademy.fo.settings.YamlConfig#saveComments()
+	 */
+	@Override
+	protected boolean saveComments() {
+		return false;
+	}
+
 	// -----------------------------------------------------------------------------
 
 	public static final class PlayerDataFile implements ConfigSerializable {
@@ -188,12 +196,10 @@ public class PlayerData extends YamlSectionConfig {
 				return value.serialize();
 			}
 		}));
-
-		onLoadFinish();
 	}
 
 	public final ChestDataCache getWeak(Player owner, Chest chest) {
-		return data.contains(owner.getUniqueId()) ? data.get(owner.getUniqueId()).get(chest) : null;
+		return data.containsKey(owner.getUniqueId()) ? data.get(owner.getUniqueId()).get(chest) : null;
 	}
 
 	public final boolean hasSnowEnabled(Player player) {
@@ -211,7 +217,5 @@ public class PlayerData extends YamlSectionConfig {
 
 	private void saveSnowData() {
 		save("Snow_Disabled", Common.convert(snowDisabled.getSource(), UUID::toString));
-
-		onLoadFinish();
 	}
 }

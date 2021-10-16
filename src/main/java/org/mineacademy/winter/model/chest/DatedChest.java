@@ -39,10 +39,10 @@ public final class DatedChest extends InfiniteChest {
 
 		final Date now = new Date();
 
-		if (!day.isWithin(now.getTime()))
+		if (!day.isInRangeLong(now.getTime()))
 			return false;
 
-		return hour == null || hour.isWithin(now.getHours() * 60 + now.getMinutes());
+		return hour == null || hour.isInRangeLong(now.getHours() * 60 + now.getMinutes());
 	}
 
 	@Override
